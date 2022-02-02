@@ -55,12 +55,19 @@ public class AutonomousBot extends LinearOpMode {
     public void runOpMode() {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
-        waitForStart();
-
-        testAuto();
+        fullVisionAuto();
+        //visionTestAuto();
     }
 
-    public void testAuto() {
+    public void fullVisionAuto() {
+        ComputerVision vision = new ComputerVision(hardwareMap, telemetry);
+
+        waitForStart();
+
+        int temp = -1;
+        if (vision.pipeline.position == ComputerVision.TeamElementPipeline.ElementPosition.MIDDLE) { temp = 0; }
+        else if (vision.pipeline.position == ComputerVision.TeamElementPipeline.ElementPosition.RIGHT) { temp = 1; }
+
         forwardBetter(.3,3.7,.05, telemetry);
         sleep(500);
         turnByBetter(.3,272, .05, telemetry);
@@ -82,24 +89,76 @@ public class AutonomousBot extends LinearOpMode {
         forwardBetter(.4,38,.1, telemetry);
         turnByBetter(.3, 267, .05, telemetry);
 
-        backwardBetter(.25, 12, .05, telemetry);
-        robot.setMotors(.1,.1);
-        sleep(500);
-        robot.setMotors(0,0);
+        if (temp == -1) {
+            backwardBetter(.25, 12, .05, telemetry);
+            robot.setMotors(.1,.1);
+            sleep(500);
+            robot.setMotors(0,0);
 
-        robot.LinearSlide.setPower(.8);
-        sleep(1000);
-        robot.LinearSlide.setPower(0);
-        robot.BoxServo.setPosition(.25);
-        sleep(1000);
-        robot.BoxServo.setPosition(CompetitionBot.BOX_VERT);
-        robot.LinearSlide.setPower(-.8);
-        sleep(900);
-        robot.LinearSlide.setPower(0);
+            //forwardBetter(.2, .5, .03, telemetry);
 
-        forwardBetter(.3, 4, .05, telemetry);
-        turnByBetter(.2,85, .02, telemetry);
-        forward(.8, 60, telemetry);
+            robot.LinearSlide.setPower(.8);
+            sleep(1000);
+            robot.LinearSlide.setPower(0);
+            robot.BoxServo.setPosition(.25);
+            sleep(1000);
+            robot.BoxServo.setPosition(CompetitionBot.BOX_VERT);
+            robot.LinearSlide.setPower(-.8);
+            sleep(900);
+            robot.LinearSlide.setPower(0);
+
+            forwardBetter(.3, 4, .05, telemetry);
+            turnByBetter(.2,85, .02, telemetry);
+            forward(.8, 60, telemetry);
+        }
+        if (temp == 0) {
+            backwardBetter(.25, 12, .05, telemetry);
+            robot.setMotors(.1,.1);
+            sleep(500);
+            robot.setMotors(0,0);
+            sleep(500);
+
+            forwardBetter(.2, 3.5, .03, telemetry);
+
+            robot.LinearSlide.setPower(.8);
+            sleep(1000);
+            robot.LinearSlide.setPower(0);
+            robot.BoxServo.setPosition(.25);
+            sleep(1000);
+            robot.BoxServo.setPosition(CompetitionBot.BOX_VERT);
+            sleep(1000);
+            robot.LinearSlide.setPower(-.8);
+            sleep(1000);
+            robot.LinearSlide.setPower(0);
+
+            forwardBetter(.3, 2.5, .05, telemetry);
+            turnByBetter(.2,85, .02, telemetry);
+            forward(.8, 60, telemetry);
+        }
+        if (temp == 1) {
+            backwardBetter(.25, 12, .05, telemetry);
+            robot.setMotors(.1,.1);
+            sleep(500);
+            robot.setMotors(0,0);
+            sleep(500);
+
+            forwardBetter(.2, 4.7, .03, telemetry);
+
+            robot.LinearSlide.setPower(.8);
+            sleep(600);
+            robot.LinearSlide.setPower(0);
+            robot.BoxServo.setPosition(.25);
+            sleep(1000);
+            robot.BoxServo.setPosition(CompetitionBot.BOX_VERT);
+            sleep(1000);
+            robot.LinearSlide.setPower(-.8);
+            sleep(500);
+            robot.LinearSlide.setPower(0);
+
+            forwardBetter(.3, 2, .05, telemetry);
+            turnByBetter(.2,85, .02, telemetry);
+            forward(.8, 60, telemetry);
+        }
     }
 
     public void redCarouselAuto(){
