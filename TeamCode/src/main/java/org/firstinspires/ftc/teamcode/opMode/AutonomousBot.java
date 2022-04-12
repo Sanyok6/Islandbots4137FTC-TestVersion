@@ -71,7 +71,7 @@ public class AutonomousBot extends LinearOpMode {
         forwardBetter(.3,3.7,.05, telemetry);
         sleep(500);
         turnByBetter(.3,272, .05, telemetry);
-        backwardBetter(.2, 13, .02, telemetry);
+        backwardBetter(.3, 13, .02, telemetry);
         sleep(500);
 
         double currentAngle = robot.getPitch();
@@ -342,6 +342,7 @@ public class AutonomousBot extends LinearOpMode {
             telemetry.addData("gyro: ", robot.getPitch());
             telemetry.addData("diff: ", diff);
             telemetry.addData("speed: ", speed);
+            telemetry.addData("Alex_test: ", speed);
             telemetry.update();
 
         }
