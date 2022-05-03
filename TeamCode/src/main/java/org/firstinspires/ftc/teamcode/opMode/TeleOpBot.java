@@ -133,8 +133,9 @@ public class TeleOpBot extends LinearOpMode {
                 telemetry.addData("Dist", dist);
                 if (dist > 15) {
                     robot.tankMove(0.8, 0, false, false, telemetry);
-                }
-                if (dist < 15) {
+                } else {
+                    telemetry.addData("test", robot.LinearSlide.getCurrentPosition());
+
                     robot.LinearSlide.setPower(.8);
                     sleep(1000);
                     robot.LinearSlide.setPower(0);
