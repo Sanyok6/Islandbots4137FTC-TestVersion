@@ -63,6 +63,8 @@ public class TeleOpBot extends LinearOpMode {
 
         boolean betterDuckBool = false;
 
+        boolean driveUp = false;
+
         waitForStart();
 
         while (opModeIsActive()) {
@@ -95,7 +97,7 @@ public class TeleOpBot extends LinearOpMode {
 
             robot.tankMove(motion, rotation, fastMode, slowMode, telemetry);
 
-            boolean driveUp = gamepad1.x == true;
+            driveUp = gamepad1.x == !driveUp;
 
             // Intake
             boolean reverseIntake = gamepad2.right_trigger > 0.5;
@@ -145,6 +147,8 @@ public class TeleOpBot extends LinearOpMode {
                     robot.LinearSlide.setPower(-.8);
                     sleep(900);
                     robot.LinearSlide.setPower(0);
+
+                    driveUp = false;
                 }
             }
 
