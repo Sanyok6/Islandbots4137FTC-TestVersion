@@ -33,9 +33,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 import org.firstinspires.ftc.teamcode.robot.GamepadButton;
 
@@ -57,6 +59,8 @@ public class TeleOpBot extends LinearOpMode {
 
         GamepadButton betterDuckButton = new GamepadButton(2);
 
+        DistanceSensor distance;
+
         boolean betterDuckBool = false;
 
         waitForStart();
@@ -69,7 +73,6 @@ public class TeleOpBot extends LinearOpMode {
 
             // Gamepad 2: Utility
             double slide = gamepad2.left_stick_y;
-
 
             // Button Updates
             intakeButton.update(gamepad2.a);
@@ -85,7 +88,14 @@ public class TeleOpBot extends LinearOpMode {
             // Motion
             boolean slowMode = gamepad1.left_trigger > 0.5;
             boolean fastMode = gamepad1.right_trigger > 0.5;
+
+            telemetry.addData("A: ", motion);
+            telemetry.addData("B: ", rotation);
+            telemetry.addData("C: ", fastMode);
+
             robot.tankMove(motion, rotation, fastMode, slowMode, telemetry);
+
+            boolean driveUp = gamepad1.x == true;
 
             // Intake
             boolean reverseIntake = gamepad2.right_trigger > 0.5;
@@ -115,6 +125,28 @@ public class TeleOpBot extends LinearOpMode {
             // Linear Slide
             if (slide>.1 || slide <.1) robot.LinearSlide.setPower(slide);
             else robot.LinearSlide.setPower(0);
+
+            distance = hardwareMap.get(DistanceSensor.class, "Distance");
+
+            if (driveUp) {
+                double dist = distance.getDistance(DistanceUnit.CM);
+                telemetry.addData("Dist", dist);
+                if (dist > 15) {
+                    robot.tankMove(0.8, 0, false, false, telemetry);
+                }
+                if (dist < 15) {
+                    robot.LinearSlide.setPower(.8);
+                    sleep(1000);
+                    robot.LinearSlide.setPower(0);
+                    robot.BoxServo.setPosition(.25);
+                    sleep(1000);
+                    robot.BoxServo.setPosition(CompetitionBot.BOX_VERT);
+                    robot.LinearSlide.setPower(-.8);
+                    sleep(900);
+                    robot.LinearSlide.setPower(0);
+                }
+            }
+
             telemetry.addData("Slide: ", robot.LinearSlide.getCurrentPosition());
             telemetry.update();
 
